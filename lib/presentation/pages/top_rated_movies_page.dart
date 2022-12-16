@@ -21,14 +21,14 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
     super.initState();
     Future.microtask(() =>
         Provider.of<TopRatedMoviesNotifier>(context, listen: false)
-            .fetchTopRatedMovies(true));
+            .fetchTopRatedMovies(widget.isMovie));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Top Rated Movies'),
+        title: Text(widget.isMovie ? 'Top Rated Movies' : 'Top Rated TV'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
