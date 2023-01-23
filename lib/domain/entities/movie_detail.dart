@@ -3,7 +3,7 @@ import 'package:ditonton/domain/entities/season.dart';
 import 'package:equatable/equatable.dart';
 
 class MovieDetail extends Equatable {
-  MovieDetail({
+  const MovieDetail({
     required this.adult,
     required this.backdropPath,
     required this.genres,
@@ -48,4 +48,20 @@ class MovieDetail extends Equatable {
         voteCount,
         seasons,
       ];
+
+  static const empty = MovieDetail(
+    adult: false,
+    backdropPath: "",
+    genres: const <Genre>[],
+    id: 0,
+    originalTitle: "",
+    overview: "",
+    posterPath: "",
+    releaseDate: "",
+    runtime: 0,
+    title: "",
+    voteAverage: 0,
+    voteCount: 0,
+    seasons: const <Season>[],
+  );
 }

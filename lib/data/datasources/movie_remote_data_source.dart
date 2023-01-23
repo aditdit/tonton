@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:ditonton/data/models/movie_detail_model.dart';
 import 'package:ditonton/data/models/movie_model.dart';
 import 'package:ditonton/data/models/movie_response.dart';
 import 'package:ditonton/common/exception.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 abstract class MovieRemoteDataSource {
@@ -26,6 +28,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   @override
   Future<List<MovieModel>> getNowPlayingMovies(bool isMovie) async {
     final path = isMovie ? "now_playing" : "on_the_air";
+
     final response = await client
         .get(Uri.parse('$BASE_URL/${getCategory(isMovie)}/$path?$API_KEY'));
 
@@ -78,8 +81,6 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<List<MovieModel>> getTopRatedMovies(bool isMovie) async {
-    final category = isMovie ? "movie" : "tv";
-
     final response = await client
         .get(Uri.parse('$BASE_URL/${getCategory(isMovie)}/top_rated?$API_KEY'));
 
@@ -105,4 +106,11 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   String getCategory(bool isMovie) {
     return isMovie ? "movie" : "tv";
   }
+}
+
+Future<SecurityContext> get globalContext async {
+  final sslCert = await rootBundle.load('certificates/certificates.pem');
+  SecurityContext securityContext = SecurityContext(withTrustedRoots: false);
+  securityContext.setTrustedCertificatesBytes(sslCert.buffer.asInt8List());
+  return securityContext;
 }

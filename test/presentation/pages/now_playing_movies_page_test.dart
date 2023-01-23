@@ -1,26 +1,26 @@
-import 'package:ditonton/common/state_enum.dart';
-import 'package:ditonton/domain/entities/movie.dart';
+import 'package:ditonton/presentation/bloc/now_playing_movies/now_playing_movie_bloc.dart';
 import 'package:ditonton/presentation/pages/now_playing_movies_page.dart';
-import 'package:ditonton/presentation/provider/now_playing_movies_notifier.dart';
+import 'package:bloc_test/bloc_test.dart';
+import 'package:ditonton/common/state_enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'package:provider/provider.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'now_playing_movies_page_test.mocks.dart';
+class MockNowPlayingMovieBloc
+    extends MockBloc<NowPlayingMovieEvent, NowPlayingMovieState>
+    implements NowPlayingMovieBloc {}
 
-@GenerateMocks([NowPlayingMoviesNotifier])
 void main() {
-  late MockNowPlayingMoviesNotifier mockNotifier;
+  late NowPlayingMovieBloc nowPlayingMovieBloc;
 
   setUp(() {
-    mockNotifier = MockNowPlayingMoviesNotifier();
+    nowPlayingMovieBloc = MockNowPlayingMovieBloc();
   });
 
   Widget _makeTestableWidget(Widget body) {
-    return ChangeNotifierProvider<NowPlayingMoviesNotifier>.value(
-      value: mockNotifier,
+    return BlocProvider<NowPlayingMovieBloc>(
+      create: (context) => nowPlayingMovieBloc,
       child: MaterialApp(
         home: body,
       ),
@@ -29,7 +29,9 @@ void main() {
 
   testWidgets('Page should display progress bar when loading',
       (WidgetTester tester) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loading);
+    when(() => nowPlayingMovieBloc.state).thenReturn(
+      const NowPlayingMovieState(state: RequestState.Loading),
+    );
 
     final progressFinder = find.byType(CircularProgressIndicator);
     final centerFinder = find.byType(Center);
@@ -44,8 +46,9 @@ void main() {
 
   testWidgets('Page should display when data is loaded',
       (WidgetTester tester) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.movies).thenReturn(<Movie>[]);
+    when(() => nowPlayingMovieBloc.state).thenReturn(
+      const NowPlayingMovieState(state: RequestState.Loaded, movies: []),
+    );
 
     final listViewFinder = find.byType(ListView);
 
@@ -58,8 +61,10 @@ void main() {
 
   testWidgets('Page should display text with message when Error',
       (WidgetTester tester) async {
-    when(mockNotifier.state).thenReturn(RequestState.Error);
-    when(mockNotifier.message).thenReturn('Error message');
+    when(() => nowPlayingMovieBloc.state).thenReturn(
+      const NowPlayingMovieState(
+          state: RequestState.Error, message: 'Error message'),
+    );
 
     final textFinder = find.byKey(Key('error_message'));
 
