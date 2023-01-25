@@ -1,27 +1,17 @@
+import 'package:about/about.dart';
+import 'package:core/core.dart';
+import 'package:core/utils/routes.dart';
+import 'package:core/utils/utils.dart';
 import 'package:ditonton/firebase_options.dart';
-import 'package:ditonton/presentation/bloc/movie_detail/movie_detail_bloc.dart';
-import 'package:ditonton/presentation/bloc/movie_list/movie_list_bloc.dart';
-import 'package:ditonton/presentation/bloc/now_playing_movies/now_playing_movie_bloc.dart';
-import 'package:ditonton/presentation/bloc/popular_movies/popular_movie_bloc.dart';
-import 'package:ditonton/presentation/bloc/search/search_bloc.dart';
-import 'package:ditonton/common/constants.dart';
-import 'package:ditonton/common/utils.dart';
-import 'package:ditonton/presentation/bloc/top_rated_movies/top_rated_movie_bloc.dart';
-import 'package:ditonton/presentation/bloc/watchlist_movie/watchlist_movie_bloc.dart';
-import 'package:ditonton/presentation/pages/about_page.dart';
-import 'package:ditonton/presentation/pages/movie_detail_page.dart';
-import 'package:ditonton/presentation/pages/home_movie_page.dart';
-import 'package:ditonton/presentation/pages/now_playing_movies_page.dart';
-import 'package:ditonton/presentation/pages/popular_movies_page.dart';
-import 'package:ditonton/presentation/pages/search_page.dart';
-import 'package:ditonton/presentation/pages/top_rated_movies_page.dart';
-import 'package:ditonton/presentation/pages/watchlist_movies_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie/movie.dart';
 import 'package:provider/provider.dart';
 import 'package:ditonton/injection.dart' as di;
+import 'package:search/search.dart';
+import 'package:watchlist/watchlist.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,19 +63,19 @@ class MyApp extends StatelessWidget {
           switch (settings.name) {
             case '/home':
               return MaterialPageRoute(builder: (_) => HomeMoviePage());
-            case NowPlayingMoviesPage.ROUTE_NAME:
+            case NOW_PLAYING_MOVIE_ROUTE:
               final isMovie = settings.arguments as bool;
               return CupertinoPageRoute(
                   builder: (_) => NowPlayingMoviesPage(isMovie: isMovie));
-            case PopularMoviesPage.ROUTE_NAME:
+            case POPULAR_MOVIES_ROUTE:
               final isMovie = settings.arguments as bool;
               return CupertinoPageRoute(
                   builder: (_) => PopularMoviesPage(isMovie: isMovie));
-            case TopRatedMoviesPage.ROUTE_NAME:
+            case TOP_RATED_ROUTE:
               final isMovie = settings.arguments as bool;
               return CupertinoPageRoute(
                   builder: (_) => TopRatedMoviesPage(isMovie: isMovie));
-            case MovieDetailPage.ROUTE_NAME:
+            case MOVIE_DETAIL_ROUTE:
               final args = settings.arguments as Map;
               final id = args["id"];
               final isMovie = args["isMovie"];
@@ -93,11 +83,11 @@ class MyApp extends StatelessWidget {
                 builder: (_) => MovieDetailPage(id: id, isMovie: isMovie),
                 settings: settings,
               );
-            case SearchPage.ROUTE_NAME:
+            case SEARCH_ROUTE:
               final isMovie = settings.arguments as bool;
               return CupertinoPageRoute(
                   builder: (_) => SearchPage(isMovie: isMovie));
-            case WatchlistMoviesPage.ROUTE_NAME:
+            case WATCHLIST_MOVIES_ROUTE:
               return MaterialPageRoute(builder: (_) => WatchlistMoviesPage());
             case AboutPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => AboutPage());
