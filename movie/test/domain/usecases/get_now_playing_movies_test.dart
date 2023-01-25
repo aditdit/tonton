@@ -4,7 +4,7 @@ import 'package:movie/domain/usecases/get_now_playing_movies.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../../core/test/helpers/test_helper.mocks.dart';
+import '../../../../core/test/helpers/test_helper.mocks.dart';
 
 void main() {
   late GetNowPlayingMovies usecase;
